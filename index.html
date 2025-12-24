@@ -603,115 +603,66 @@
     </section>
   </div>
 <script>
-const videos = Array.from(document.querySelectorAll(".video-item video"));
-const items  = Array.from(document.querySelectorAll(".video-item"));
+document.addEventListener("DOMContentLoaded", () => {
+  const videos = document.querySelectorAll(".video-item video");
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-const videosScroll = document.querySelector(".videos-scroll");
-const pageContainer = document.querySelector(".page-container");
-const videosSection = document.querySelector(".videos-page");
+  let unlocked = !isMobile;
 
-const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-let unlocked = !isMobile;
-let activeIndex = 0;
-let exitedVideos = false;
-
-if (!isMobile) {
+  /* ---------- PREP ---------- */
   videos.forEach(v => {
     v.muted = true;
-    v.play().catch(() => {});
+    v.playsInline = true;
+    v.loop = true;
   });
-}
 
-
-/* ---------- UNLOCK AUTOPLAY (MOBILE) ---------- */
-if (isMobile) {
-  const unlock = () => {
-    unlocked = true;
-    videos.forEach(v => {
-      v.muted = true;
-      v.play().catch(() => {});
-    });
-
-    window.removeEventListener("touchstart", unlock);
-    window.removeEventListener("scroll", unlock);
-  };
-
-  window.addEventListener("touchstart", unlock, { once: true });
-  window.addEventListener("scroll", unlock, { once: true });
-}
-
-/* ---------- SNAP OBSERVER (SOURCE OF TRUTH) ---------- */
-const snapObserver = new IntersectionObserver(
-  entries => {
-    entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
-
-      const index = items.indexOf(entry.target);
-      if (index === -1) return;
-
-      activeIndex = index;
-      syncVideos();
-    });
-  },
-  { threshold: 0.6 }
-);
-
-items.forEach(item => snapObserver.observe(item));
-
-/* ---------- PLAY / PAUSE LOGIC ---------- */
-function syncVideos() {
-  if (!unlocked) return;
-
-  // 📱 МОБИЛКА — только активное
+  /* ---------- UNLOCK AUTOPLAY (MOBILE) ---------- */
   if (isMobile) {
-    videos.forEach((video, i) => {
-      if (i === activeIndex) {
-        video.play().catch(() => {});
-      }
-    });
+    const unlock = () => {
+      unlocked = true;
+
+      videos.forEach(v => {
+        v.play().catch(() => {});
+      });
+
+      window.removeEventListener("touchstart", unlock);
+      window.removeEventListener("click", unlock);
+    };
+
+    window.addEventListener("touchstart", unlock, { once: true });
+    window.addEventListener("click", unlock, { once: true });
   }
-}
 
+  /* ---------- INTERSECTION ---------- */
+  const observer = new IntersectionObserver(
+    entries => {
+      entries.forEach(entry => {
+        const video = entry.target;
 
-/* ---------- SWIPE HINT ---------- */
-const swipeHint = document.querySelector(".swipe-hint");
-if (swipeHint && videosScroll) {
-  videosScroll.addEventListener(
-    "scroll",
-    () => {
-      swipeHint.style.opacity = "0";
-      swipeHint.style.transition = "opacity .4s";
+        if (!unlocked) return;
+
+        if (isMobile) {
+          // 📱 MOBILE — НИКОГДА НЕ PAUSE
+          if (video.paused) {
+            video.play().catch(() => {});
+          }
+        } else {
+          // 🖥 DESKTOP — normal behavior
+          if (entry.isIntersecting) {
+            video.play().catch(() => {});
+          } else {
+            video.pause();
+          }
+        }
+      });
     },
-    { once: true }
+    { threshold: 0.6 }
   );
-}
 
-/* ---------- EXIT TO NEXT SECTION ---------- */
-if (videosScroll && pageContainer && videosSection) {
-  videosScroll.addEventListener("scroll", () => {
-    if (activeIndex !== items.length - 1 || exitedVideos) return;
-
-    const atBottom =
-      videosScroll.scrollTop + videosScroll.clientHeight >=
-      videosScroll.scrollHeight - 5;
-
-    if (atBottom) {
-      exitedVideos = true;
-
-      const pages = Array.from(pageContainer.querySelectorAll(".page"));
-      const currentIndex = pages.indexOf(videosSection);
-      const nextPage = pages[currentIndex + 1];
-
-      if (nextPage) {
-        pageContainer.scrollTo({
-          top: nextPage.offsetTop,
-          behavior: "smooth",
-        });
-      }
-    }
-  });
-}
+  videos.forEach(v => observer.observe(v));
+});
 </script>
+
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const track = document.querySelector(".carousel-track");
@@ -809,4 +760,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
 </body>
 </html>
+
 
