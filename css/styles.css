@@ -1,0 +1,478 @@
+/* Styles extracted from index.html and organized into a standalone stylesheet. */
+
+* { box-sizing: border-box; }
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden; /* скроллим только .page-container */
+}
+
+body {
+  font-family: "Montserrat", sans-serif;
+  background: #000;
+  color: #fff;
+}
+
+/* ---------- SNAP СКРОЛЛ ДЛЯ ВСЕГО ЛЕНДИНГА ---------- */
+
+.page-container {
+  height: 100%;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.page {
+  height: 100vh;
+  scroll-snap-align: start;
+  scroll-snap-stop: always; /* не даём проскочить через секцию */
+}
+
+/* ---------------- HERO BLOCK ---------------- */
+
+.hero {
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 20px;
+  overflow: hidden;
+  filter: drop-shadow(0 0 20px rgba(255, 30, 30, 0.25));
+}
+
+.fade-up {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 0.8s ease forwards;
+}
+
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero video {
+  max-width: 65%;
+  height: auto;
+  z-index: 2;
+  object-fit: contain;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 1;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, transparent 60%, rgba(0, 0, 0, 0.6));
+  z-index: 1;
+}
+
+.hero h1 {
+  margin: 20px 0 5px;
+  font-size: 3rem;
+  z-index: 3;
+}
+
+.hero h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 300;
+  opacity: 0.8;
+  z-index: 3;
+}
+
+.cta {
+  margin-top: 25px;
+  display: flex;
+  gap: 20px;
+  z-index: 3;
+}
+
+.cta a {
+  text-decoration: none;
+  background: #ff1f1f;
+  color: #fff;
+  padding: 12px 22px;
+  border-radius: 6px;
+  font-size: 1rem;
+  box-shadow: 0 0 12px rgba(255, 0, 0, 0.4);
+  transition: 0.25s;
+}
+
+.cta a:hover {
+  background: #ff3c3c;
+  box-shadow: 0 0 20px rgba(255, 0, 0, 0.7);
+  transform: translateY(-2px);
+}
+
+/* ---------------- ОБЩЕЕ ДЛЯ СЕКЦИЙ ---------------- */
+
+section {
+  padding: 80px 20px;
+  text-align: center;
+}
+
+section h2 {
+  font-size: 2rem;
+  margin-bottom: 30px;
+}
+
+/* ---------- ВЕРТИКАЛКИ: ОТДЕЛЬНЫЙ ВНУТРЕННИЙ СКРОЛЛ ---------- */
+
+.videos-page {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 0 20px;
+}
+
+.videos-scroll {
+  flex: 1;
+  width: 100%;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 0 20px 40px;
+}
+
+.video-item {
+  height: calc(100vh - 120px); /* 120px ≈ заголовок + отступы */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* 👈 важно */
+  scroll-snap-align: start;
+}
+
+.video-item video {
+  width: 280px;
+  height: 500px;
+  object-fit: cover;
+  border-radius: 12px;
+  background: #111;
+}
+
+@media (max-width: 1023px) {
+  .videos-scroll {
+    scroll-snap-type: y mandatory;
+    overscroll-behavior: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .video-item {
+    scroll-snap-align: start;
+  }
+}
+
+.videos-scroll::after {
+  content: "";
+  height: calc(100vh - 120px);
+  flex-shrink: 0;
+}
+
+.swipe-hint {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 14px;
+  opacity: 0.6;
+  letter-spacing: 0.05em;
+  animation: swipePulse 1.6s infinite;
+  pointer-events: none;
+  z-index: 5;
+}
+
+@keyframes swipePulse {
+  0%   { transform: translate(-50%, 0); opacity: .2; }
+  50%  { transform: translate(-50%, -8px); opacity: .7; }
+  100% { transform: translate(-50%, 0); opacity: .2; }
+}
+
+/* ---------------- REPERTOIRE ---------------- */
+
+.songs {
+  max-width: 600px;
+  margin: 0 auto;
+  font-size: 1.2rem;
+  line-height: 1.8;
+  opacity: 0.9;
+}
+
+/* ---------------- GALLERY ---------------- */
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+  padding: 10px;
+}
+
+.gallery img {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+/* ---------------- CONTACTS ---------------- */
+
+.contacts a {
+  text-decoration: none;
+  background: #ff1f1f;
+  color: #fff;
+  padding: 12px 22px;
+  margin: 10px;
+  border-radius: 6px;
+  font-size: 1rem;
+  box-shadow: 0 0 12px rgba(255, 0, 0, 0.4);
+  transition: 0.25s;
+}
+
+.contacts a:hover {
+  background: #ff3c3c;
+  box-shadow: 0 0 20px rgba(255, 0, 0, 0.7);
+  transform: translateY(-2px);
+}
+
+/* ---------------- RESPONSIVE ---------------- */
+
+@media (max-width: 768px) {
+  .carousel-item {
+    width: 78vw;
+    height: auto;
+    max-height: 70vh;
+  }
+
+  .carousel-item img {
+    max-height: 70vh;
+  }
+
+  .hero video { max-width: 80%; }
+  .hero h1 { font-size: 2.4rem; }
+
+  .cta { flex-direction: column; }
+  .cta a { width: 100%; text-align: center; }
+
+  .video-item video {
+    width: 90%;
+    height: 480px;
+  }
+
+  .contacts {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    align-items: center;
+  }
+
+  .contacts a {
+    width: 100%;
+    max-width: 260px;
+    text-align: center;
+  }
+}
+
+/* ================= DESKTOP: 3 видео в ряд ================= */
+
+@media (min-width: 1024px) {
+  .videos-page { justify-content: center; }
+
+  .videos-scroll {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    overflow: visible;      /* убираем внутренний скролл */
+    scroll-snap-type: none; /* snap только для мобильных */
+    padding: 0 40px;
+  }
+
+  .video-item { scroll-snap-align: none; }
+
+  .video-item video {
+    width: 280px;
+    height: 500px;
+  }
+}
+
+/* ---------- CAROUSEL ---------- */
+
+.carousel {
+  position: relative;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+.carousel-track {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  padding: 20px 60px;
+
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none; /* IE / Edge */
+}
+
+.carousel-track::-webkit-scrollbar { display: none; }
+
+.carousel-item {
+  width: min(92vw, 420px);
+  aspect-ratio: 3 / 4; /* вертикальный герой */
+  flex: 0 0 auto;
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #000;
+  scroll-snap-align: center;
+  transition: transform .4s ease, opacity .4s ease;
+  opacity: 0.55;
+}
+
+.carousel-item.active {
+  transform: scale(1.15);
+  opacity: 1;
+  z-index: 5;
+}
+
+/* BLUR BACKGROUND */
+.carousel-item::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--bg);
+  background-size: cover;
+  background-position: center;
+  filter: blur(20px) brightness(0.6);
+  transform: scale(1.2);
+  z-index: 1;
+}
+
+.carousel-item::after {
+  content: attr(data-caption);
+  position: absolute;
+  bottom: 24px;
+  left: 16px;
+  right: 16px;
+  font-size: 12px;
+  opacity: 0.6;
+  z-index: 3;
+  white-space: normal;
+  word-break: break-word;
+}
+
+/* MAIN IMAGE */
+.carousel-item img {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  margin: 0 auto;
+  display: block;
+}
+
+.carousel-item:hover:not(.active) {
+  transform: scale(1.06);
+  opacity: 1;
+}
+
+.carousel::before,
+.carousel::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 80px;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.carousel::before {
+  left: 0;
+  background: linear-gradient(to right, #000, transparent);
+}
+
+.carousel::after {
+  right: 0;
+  background: linear-gradient(to left, #000, transparent);
+}
+
+/* ---------- ARROWS (DESKTOP) ---------- */
+
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 30, 30, 0.85);
+  border: none;
+  color: #fff;
+  font-size: 2rem;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.carousel-btn.prev { left: 0; }
+.carousel-btn.next { right: 0; }
+
+/* ---------- MOBILE ---------- */
+@media (max-width: 480px) {
+  .carousel-item {
+    width: 92vw;
+    aspect-ratio: 3 / 5; /* ещё вертикальнее */
+  }
+
+  .carousel-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;        /* 🔑 ВАЖНО */
+    object-position: center top; /* 🔑 ВАЖНО */
+  }
+
+  .carousel-item::before {
+    filter: blur(24px) brightness(0.4);
+  }
+
+  .carousel-item::after {
+    bottom: 18px;
+    font-size: 11px;
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .carousel { padding: 0 20px; }
+
+  .carousel-item {
+    width: 82vw;
+    height: 54vh;
+  }
+
+  .carousel-btn { display: none; }
+}
