@@ -383,18 +383,20 @@
 
 <script>
 const videos = document.querySelectorAll(".video-item video");
+const items  = document.querySelectorAll(".video-item");
 
-// 👉 определяем мобильный браузер
 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+let unlocked = !isMobile;
 
-// 👉 для ПК autoplay разрешён сразу
-let userInteracted = !isMobile;
-
-// 👉 для мобилки — ждём первое взаимодействие
+/* ---------- UNLOCK AUTOPLAY ---------- */
 if (isMobile) {
   const unlock = () => {
-    userInteracted = true;
-    videos.forEach(v => v.play().catch(() => {}));
+    unlocked = true;
+    videos.forEach(v => {
+      v.muted = true;
+      v.play().catch(() => {});
+    });
+
     window.removeEventListener("touchstart", unlock);
     window.removeEventListener("scroll", unlock);
   };
@@ -403,43 +405,51 @@ if (isMobile) {
   window.addEventListener("scroll", unlock, { once: true });
 }
 
-// 👉 IntersectionObserver — play / pause по видимости
+/* ---------- PLAY ON VISIBILITY ---------- */
 const observer = new IntersectionObserver(
   entries => {
     entries.forEach(entry => {
       const video = entry.target.querySelector("video");
-      if (!video) return;
+      if (!video || !unlocked) return;
 
-      if (entry.isIntersecting && userInteracted) {
+      if (entry.isIntersecting) {
         video.play().catch(() => {});
       } else {
-        video.pause();
+        if (!isMobile) {
+          video.pause(); // ❗ ТОЛЬКО НА ПК
+        }
+        // 📱 на мобилке НЕ pause
       }
     });
   },
   { threshold: 0.6 }
 );
 
-document.querySelectorAll(".video-item").forEach(item => observer.observe(item));
+items.forEach(item => observer.observe(item));
 
+/* ---------- SWIPE HINT ---------- */
 const swipeHint = document.querySelector(".swipe-hint");
 const videosScroll = document.querySelector(".videos-scroll");
 
 if (swipeHint && videosScroll) {
-  videosScroll.addEventListener("scroll", () => {
-    swipeHint.style.opacity = "0";
-    swipeHint.style.transition = "opacity .4s";
-  }, { once: true });
+  videosScroll.addEventListener(
+    "scroll",
+    () => {
+      swipeHint.style.opacity = "0";
+      swipeHint.style.transition = "opacity .4s";
+    },
+    { once: true }
+  );
 }
 
-const videosScroll = document.querySelector(".videos-scroll");
+/* ---------- EXIT FROM VIDEOS SECTION ---------- */
 const pageContainer = document.querySelector(".page-container");
 
 if (videosScroll && pageContainer) {
   videosScroll.addEventListener("scroll", () => {
     const atBottom =
       videosScroll.scrollTop + videosScroll.clientHeight >=
-      videosScroll.scrollHeight - 10;
+      videosScroll.scrollHeight - 8;
 
     if (atBottom) {
       pageContainer.scrollTo({
@@ -449,8 +459,8 @@ if (videosScroll && pageContainer) {
     }
   });
 }
-
 </script>
+
 
 </body>
 </html>
