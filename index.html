@@ -9,7 +9,11 @@
   <title>Mixtape — Live Cover Band</title>
 
   <style>
-    body {
+    * {
+  box-sizing: border-box;
+}
+
+	body {
       margin: 0;
       font-family: 'Montserrat', sans-serif;
       background: #000;
@@ -29,6 +33,7 @@
       justify-content: center;
       text-align: center;
       padding: 0 20px;
+	  overflow: hidden;
 	  filter: drop-shadow(0 0 20px rgba(255, 30, 30, 0.25));
     }
 	.fade-up {
@@ -128,6 +133,32 @@
     }
 
     /* ---------------- VERTICAL VIDEOS BLOCK ---------------- */
+	
+	.video-wrap {
+  width: 280px;
+  height: 500px;
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #111;
+}
+
+/* skeleton */
+.video-wrap.loading::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, #111 0%, #1e1e1e 50%, #111 100%);
+  background-size: 200% 100%;
+  animation: loadingAnim 1.3s infinite;
+  border-radius: inherit;
+}
+
+@keyframes loadingAnim {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
 
     .vertical-videos {
       display: flex;
@@ -208,15 +239,30 @@
         height: 480px;
       }
     }
+  html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden; /* отключаем обычный скролл */
+}
+.page-container {
+  height: 100%;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth; /* плавность */
+}
 
+.page {
+  height: 100vh;
+  scroll-snap-align: start;
+}
   </style>
 </head>
 
 <body>
 
   <!-- ================= HERO BLOCK ================= -->
-
-  <div class="hero">
+<div class="page-container">
+  <div class="page hero">
     <video autoplay loop muted playsinline>
       <source src="media/mixtape_logo.webm" type="video/webm">
     </video>
@@ -232,18 +278,23 @@
 
   <!-- ================= SECTION 2: VERTICAL VIDEOS ================= -->
 
-  <section id="videos">
+  <section class="page" id="videos">
     <h2>Live моменты</h2>
     <div class="vertical-videos">
+	<div class="video-wrap loading">
       <video autoplay loop muted playsinline src="media/vert1.mp4"></video>
+	</div>
+	<div class="video-wrap loading">
       <video autoplay loop muted playsinline src="media/vert2.mp4"></video>
+	</div>	<div class="video-wrap loading">
       <video autoplay loop muted playsinline src="media/vert3.mp4"></video>
+	</div>
     </div>
   </section>
 
   <!-- ================= SECTION 3: REPERTOIRE ================= -->
 
-  <section id="repertoire">
+  <section class="page" id="repertoire">
     <h2>Сет-лист</h2>
     <div class="songs">
       Blue October<br>
@@ -255,7 +306,7 @@
 
   <!-- ================= SECTION 4: GALLERY ================= -->
 
-  <section id="gallery">
+  <section class="page" id="gallery">
     <h2>Атмосфера</h2>
     <div class="gallery">
       <img src="media/photo1.jpg">
@@ -269,7 +320,7 @@
 
   <!-- ================= SECTION 5: CONTACTS ================= -->
 
-  <section id="contacts">
+  <section class="page" id="contacts">
     <h2>Контакты</h2>
     <p>Играем в Томске, Новосибирске и Кемерово</p>
     <div class="contacts">
@@ -278,6 +329,13 @@
       <a href="tel:+79990000000">Позвонить</a>
     </div>
   </section>
-
+</div>
+<script>
+document.querySelectorAll(".video-wrap video").forEach(v => {
+  v.addEventListener("loadeddata", () => {
+    v.parentElement.classList.remove("loading");
+  });
+});
+</script>
 </body>
 </html>
