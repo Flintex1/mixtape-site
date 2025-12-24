@@ -316,8 +316,8 @@
         <source src="media/mixtape_logo.webm" type="video/webm" />
       </video>
 
-      <h1 class="fade-up">Mixtape</h1>
-      <h2 class="fade-up" style="animation-delay: 0.2s">Rock Versions of Pop Hits</h2>
+      <h1 class="fade-up">MIXTAPE</h1>
+      <h2 class="fade-up" style="animation-delay: 0.2s">Лайв каверы популярных хитов</h2>
 
       <div class="cta">
         <a href="#videos">▶ Смотреть лайв</a>
@@ -442,20 +442,33 @@ if (swipeHint && videosScroll) {
   );
 }
 
-/* ---------- EXIT FROM VIDEOS SECTION ---------- */
+/* ---------- EXIT FROM VIDEOS SECTION (FIXED) ---------- */
 const pageContainer = document.querySelector(".page-container");
+const videosSection = document.querySelector(".videos-page");
 
-if (videosScroll && pageContainer) {
+let exitedVideos = false;
+
+if (videosScroll && pageContainer && videosSection) {
   videosScroll.addEventListener("scroll", () => {
     const atBottom =
       videosScroll.scrollTop + videosScroll.clientHeight >=
       videosScroll.scrollHeight - 8;
 
-    if (atBottom) {
-      pageContainer.scrollTo({
-        top: pageContainer.scrollTop + window.innerHeight,
-        behavior: "smooth",
-      });
+    if (atBottom && !exitedVideos) {
+      exitedVideos = true;
+
+      const pages = Array.from(
+        pageContainer.querySelectorAll(".page")
+      );
+      const currentIndex = pages.indexOf(videosSection);
+      const nextPage = pages[currentIndex + 1];
+
+      if (nextPage) {
+        pageContainer.scrollTo({
+          top: nextPage.offsetTop,
+          behavior: "smooth",
+        });
+      }
     }
   });
 }
