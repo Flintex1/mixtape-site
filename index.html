@@ -1,30 +1,52 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+    rel="stylesheet"
+  />
   <title>Mixtape — Live Cover Band</title>
 
   <style>
     * {
-  box-sizing: border-box;
-}
+      box-sizing: border-box;
+    }
 
-	body {
+    html,
+    body {
       margin: 0;
-      font-family: 'Montserrat', sans-serif;
+      height: 100%;
+      overflow: hidden; /* скроллим только .page-container */
+    }
+
+    body {
+      font-family: "Montserrat", sans-serif;
       background: #000;
       color: #fff;
-      overflow-x: hidden;
+    }
+
+    /* ---------- SNAP СКРОЛЛ ДЛЯ ВСЕГО ЛЕНДИНГА ---------- */
+
+    .page-container {
+      height: 100%;
+      overflow-y: scroll;
+      scroll-snap-type: y mandatory;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .page {
+      height: 100vh;
+      scroll-snap-align: start;
     }
 
     /* ---------------- HERO BLOCK ---------------- */
 
     .hero {
-      height: 100vh;
       width: 100%;
       position: relative;
       display: flex;
@@ -33,23 +55,22 @@
       justify-content: center;
       text-align: center;
       padding: 0 20px;
-	  overflow: hidden;
-	  filter: drop-shadow(0 0 20px rgba(255, 30, 30, 0.25));
+      overflow: hidden;
+      filter: drop-shadow(0 0 20px rgba(255, 30, 30, 0.25));
     }
-	.fade-up {
-  opacity: 0;
-  transform: translateY(20px);
-  animation: fadeUp .8s ease forwards;
-}
 
-@keyframes fadeUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+    .fade-up {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.8s ease forwards;
+    }
 
-
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
     .hero video {
       max-width: 65%;
@@ -62,16 +83,17 @@
       content: "";
       position: absolute;
       inset: 0;
-      background: rgba(0, 0, 0, 0.35); /* легкое затемнение */
+      background: rgba(0, 0, 0, 0.35);
       z-index: 1;
     }
-	.hero::after {
-  content:"";
-  position:absolute;
-  inset:0;
-  background: radial-gradient(circle at center, transparent 60%, rgba(0,0,0,0.6));
-  z-index: 1;
-}
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, transparent 60%, rgba(0, 0, 0, 0.6));
+      z-index: 1;
+    }
 
     .hero h1 {
       margin: 20px 0 5px;
@@ -101,26 +123,17 @@
       padding: 12px 22px;
       border-radius: 6px;
       font-size: 1rem;
-      transition: 0.2s;
+      box-shadow: 0 0 12px rgba(255, 0, 0, 0.4);
+      transition: 0.25s;
     }
 
     .cta a:hover {
       background: #ff3c3c;
+      box-shadow: 0 0 20px rgba(255, 0, 0, 0.7);
+      transform: translateY(-2px);
     }
-	
-	.cta a {
-  background: #ff1f1f;
-  box-shadow: 0 0 12px rgba(255,0,0,0.4);
-  transition: .25s;
-}
 
-.cta a:hover {
-  box-shadow: 0 0 20px rgba(255,0,0,0.7);
-  transform: translateY(-2px);
-}
-
-
-    /* ---------------- SECTION WRAPPER ---------------- */
+    /* ---------------- ОБЩЕЕ ДЛЯ СЕКЦИЙ ---------------- */
 
     section {
       padding: 80px 20px;
@@ -132,48 +145,73 @@
       margin-bottom: 30px;
     }
 
-    /* ---------------- VERTICAL VIDEOS BLOCK ---------------- */
-	
-	.video-wrap {
-  width: 280px;
-  height: 500px;
-  position: relative;
-  border-radius: 12px;
-  overflow: hidden;
-  background: #111;
-}
+    /* ---------- ВЕРТИКАЛКИ: ОТДЕЛЬНЫЙ ВНУТРЕННИЙ СКРОЛЛ ---------- */
 
-/* skeleton */
-.video-wrap.loading::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, #111 0%, #1e1e1e 50%, #111 100%);
-  background-size: 200% 100%;
-  animation: loadingAnim 1.3s infinite;
-  border-radius: inherit;
-}
-
-@keyframes loadingAnim {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
-
-
-    .vertical-videos {
+    .videos-page {
+      overflow: hidden;
       display: flex;
-      justify-content: center;
-      gap: 20px;
-      flex-wrap: wrap;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 0 20px;
     }
 
-    .vertical-videos video {
+    .videos-scroll {
+      flex: 1;
+      width: 100%;
+      overflow-y: auto;
+      scroll-snap-type: y mandatory;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding: 0 20px 40px;
+    }
+
+    .video-item {
+      display: flex;
+      justify-content: center;
+      scroll-snap-align: start;
+    }
+
+    .video-item video {
       width: 280px;
       height: 500px;
       object-fit: cover;
       border-radius: 12px;
       background: #111;
     }
+	
+	@media (max-width: 1023px) {
+
+  .videos-scroll {
+    scroll-snap-type: y mandatory;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .video-item {
+    scroll-snap-align: start;
+  }
+}
+
+.swipe-hint {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 14px;
+  opacity: 0.6;
+  letter-spacing: 0.05em;
+  animation: swipePulse 1.6s infinite;
+  pointer-events: none;
+  z-index: 5;
+}
+
+@keyframes swipePulse {
+  0%   { transform: translate(-50%, 0); opacity: .2; }
+  50%  { transform: translate(-50%, -8px); opacity: .7; }
+  100% { transform: translate(-50%, 0); opacity: .2; }
+}
+
 
     /* ---------------- REPERTOIRE ---------------- */
 
@@ -234,108 +272,167 @@
         width: 100%;
         text-align: center;
       }
-      .vertical-videos video {
+      .video-item video {
         width: 90%;
         height: 480px;
       }
     }
-  html, body {
-  margin: 0;
-  height: 100%;
-  overflow: hidden; /* отключаем обычный скролл */
-}
-.page-container {
-  height: 100%;
-  overflow-y: scroll;
-  scroll-snap-type: y mandatory;
-  scroll-behavior: smooth; /* плавность */
+	/* ================= DESKTOP: 3 видео в ряд ================= */
+
+@media (min-width: 1024px) {
+
+  .videos-page {
+    justify-content: center;
+  }
+
+  .videos-scroll {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    overflow: visible;          /* убираем внутренний скролл */
+    scroll-snap-type: none;     /* snap только для мобильных */
+    padding: 0 40px;
+  }
+
+  .video-item {
+    scroll-snap-align: none;
+  }
+
+  .video-item video {
+    width: 280px;
+    height: 500px;
+  }
 }
 
-.page {
-  height: 100vh;
-  scroll-snap-align: start;
-}
   </style>
 </head>
 
 <body>
+  <div class="page-container">
+    <!-- ================= HERO ================= -->
+    <div class="page hero">
+      <video autoplay loop muted playsinline>
+        <source src="media/mixtape_logo.webm" type="video/webm" />
+      </video>
 
-  <!-- ================= HERO BLOCK ================= -->
-<div class="page-container">
-  <div class="page hero">
-    <video autoplay loop muted playsinline>
-      <source src="media/mixtape_logo.webm" type="video/webm">
-    </video>
+      <h1 class="fade-up">Mixtape</h1>
+      <h2 class="fade-up" style="animation-delay: 0.2s">Rock Versions of Pop Hits</h2>
 
-    <h1 class="fade-up">Mixtape</h1>
-    <h2 class="fade-up" style="animation-delay:.2s"> Rock Versions of Pop Hits</h2>
-
-    <div class="cta">
-      <a href="#videos">▶ Смотреть лайв</a>
-      <a href="#contacts">📩 Забронировать</a>
+      <div class="cta">
+        <a href="#videos">▶ Смотреть лайв</a>
+        <a href="#contacts">📩 Забронировать</a>
+      </div>
     </div>
+
+    <!-- ================= ВЕРТИКАЛКИ ================= -->
+    <section class="page videos-page" id="videos">
+      <h2>Live моменты</h2>
+<div class="swipe-hint">↑ свайпни ↑</div>
+
+      <div class="videos-scroll">
+        <div class="video-item">
+          <video muted playsinline preload="none" loop src="media/vert1.mp4"></video>
+        </div>
+
+        <div class="video-item">
+          <video muted playsinline preload="none" loop src="media/vert2.mp4"></video>
+        </div>
+
+        <div class="video-item">
+          <video muted playsinline preload="none" loop src="media/vert3.mp4"></video>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= СЕТ-ЛИСТ ================= -->
+    <section class="page" id="repertoire">
+      <h2>Сет-лист</h2>
+      <div class="songs">
+        Blue October<br />
+        Звери<br />
+        Савичева<br />
+        + ещё более 20 исполнителей
+      </div>
+    </section>
+
+    <!-- ================= ГАЛЕРЕЯ ================= -->
+    <section class="page" id="gallery">
+      <h2>Атмосфера</h2>
+      <div class="gallery">
+        <img src="media/photo1.jpg" alt="" />
+        <img src="media/photo2.jpg" alt="" />
+        <img src="media/photo3.jpg" alt="" />
+        <img src="media/photo4.jpg" alt="" />
+        <img src="media/photo5.jpg" alt="" />
+        <img src="media/photo6.jpg" alt="" />
+      </div>
+    </section>
+
+    <!-- ================= КОНТАКТЫ ================= -->
+    <section class="page" id="contacts">
+      <h2>Контакты</h2>
+      <p>Играем в Томске, Новосибирске и Кемерово</p>
+      <div class="contacts">
+        <a href="https://t.me/yourusername" target="_blank">Telegram</a>
+        <a href="https://vk.com/yourpage" target="_blank">VK</a>
+        <a href="tel:+79990000000">Позвонить</a>
+      </div>
+    </section>
   </div>
 
-  <!-- ================= SECTION 2: VERTICAL VIDEOS ================= -->
-
-  <section class="page" id="videos">
-    <h2>Live моменты</h2>
-    <div class="vertical-videos">
-	<div class="video-wrap loading">
-      <video autoplay loop muted playsinline src="media/vert1.mp4"></video>
-	</div>
-	<div class="video-wrap loading">
-      <video autoplay loop muted playsinline src="media/vert2.mp4"></video>
-	</div>	<div class="video-wrap loading">
-      <video autoplay loop muted playsinline src="media/vert3.mp4"></video>
-	</div>
-    </div>
-  </section>
-
-  <!-- ================= SECTION 3: REPERTOIRE ================= -->
-
-  <section class="page" id="repertoire">
-    <h2>Сет-лист</h2>
-    <div class="songs">
-      Blue October<br>
-      Звери<br>
-	  Савичева<br>
-      + ещё более 20 исполнителей
-    </div>
-  </section>
-
-  <!-- ================= SECTION 4: GALLERY ================= -->
-
-  <section class="page" id="gallery">
-    <h2>Атмосфера</h2>
-    <div class="gallery">
-      <img src="media/photo1.jpg">
-      <img src="media/photo2.jpg">
-      <img src="media/photo3.jpg">
-      <img src="media/photo4.jpg">
-      <img src="media/photo5.jpg">
-      <img src="media/photo6.jpg">
-    </div>
-  </section>
-
-  <!-- ================= SECTION 5: CONTACTS ================= -->
-
-  <section class="page" id="contacts">
-    <h2>Контакты</h2>
-    <p>Играем в Томске, Новосибирске и Кемерово</p>
-    <div class="contacts">
-      <a href="https://t.me/yourusername" target="_blank">Telegram</a>
-      <a href="https://vk.com/yourpage" target="_blank">VK</a>
-      <a href="tel:+79990000000">Позвонить</a>
-    </div>
-  </section>
-</div>
 <script>
-document.querySelectorAll(".video-wrap video").forEach(v => {
-  v.addEventListener("loadeddata", () => {
-    v.parentElement.classList.remove("loading");
-  });
-});
+const videos = document.querySelectorAll(".video-item video");
+
+// 👉 определяем мобильный браузер
+const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+// 👉 для ПК autoplay разрешён сразу
+let userInteracted = !isMobile;
+
+// 👉 для мобилки — ждём первое взаимодействие
+if (isMobile) {
+  const unlock = () => {
+    userInteracted = true;
+    videos.forEach(v => v.play().catch(() => {}));
+    window.removeEventListener("touchstart", unlock);
+    window.removeEventListener("scroll", unlock);
+  };
+
+  window.addEventListener("touchstart", unlock, { once: true });
+  window.addEventListener("scroll", unlock, { once: true });
+}
+
+// 👉 IntersectionObserver — play / pause по видимости
+const observer = new IntersectionObserver(
+  entries => {
+    entries.forEach(entry => {
+      const video = entry.target.querySelector("video");
+      if (!video) return;
+
+      if (entry.isIntersecting && userInteracted) {
+        video.play().catch(() => {});
+      } else {
+        video.pause();
+      }
+    });
+  },
+  { threshold: 0.6 }
+);
+
+document.querySelectorAll(".video-item").forEach(item => observer.observe(item));
+
+const swipeHint = document.querySelector(".swipe-hint");
+const videosScroll = document.querySelector(".videos-scroll");
+
+if (swipeHint && videosScroll) {
+  videosScroll.addEventListener("scroll", () => {
+    swipeHint.style.opacity = "0";
+    swipeHint.style.transition = "opacity .4s";
+  }, { once: true });
+}
+
 </script>
+
 </body>
 </html>
