@@ -249,18 +249,21 @@
     /* ---------------- CONTACTS ---------------- */
 
     .contacts a {
-      display: inline-block;
-      margin: 10px;
-      padding: 12px 20px;
+      text-decoration: none;
       background: #ff1f1f;
       color: #fff;
-      border-radius: 8px;
-      text-decoration: none;
-      transition: 0.2s;
+      padding: 12px 22px;
+	  margin: 10px;
+      border-radius: 6px;
+      font-size: 1rem;
+      box-shadow: 0 0 12px rgba(255, 0, 0, 0.4);
+      transition: 0.25s;
     }
 
     .contacts a:hover {
       background: #ff3c3c;
+      box-shadow: 0 0 20px rgba(255, 0, 0, 0.7);
+      transform: translateY(-2px);
     }
 
     /* ---------------- RESPONSIVE ---------------- */
@@ -309,6 +312,153 @@
   .video-item video {
     width: 280px;
     height: 500px;
+  }
+}
+/* ---------- CAROUSEL ---------- */
+
+.carousel {
+  position: relative;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+.carousel-track {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  padding: 20px 60px;
+  
+  overflow-x: auto;                
+  scroll-snap-type: x mandatory; 
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+   scrollbar-width: none;          /* Firefox */
+  -ms-overflow-style: none;       /* IE / Edge */
+}
+.carousel-track::-webkit-scrollbar {
+  display: none;                  /* Chrome / Safari */
+}
+
+.carousel-item {
+  flex: 0 0 auto;
+  position: relative;
+  width: 360px;
+  height: 280px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #000;
+  scroll-snap-align: center;
+	transition: transform .4s ease, opacity .4s ease;
+  opacity: 0.55;
+}
+
+.carousel-item.active {
+  transform: scale(1.15);
+  opacity: 1;
+  z-index: 5;
+}
+
+/* BLUR BACKGROUND */
+.carousel-item::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--bg);
+  background-size: cover;
+  background-position: center;
+  filter: blur(20px) brightness(0.6);
+  transform: scale(1.2);
+  z-index: 1;
+}
+
+.carousel-item::after {
+  content: attr(data-caption);
+  position: absolute;
+  bottom: 12px;
+  left: 16px;
+  font-size: 12px;
+  opacity: 0.6;
+  z-index: 3;
+}
+
+/* MAIN IMAGE */
+.carousel-item img {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  margin: 0 auto;
+  display: block;
+}
+
+.carousel-item:hover:not(.active) {
+  transform: scale(1.06);
+  opacity: 1;
+}
+
+.carousel-track::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel::before,
+.carousel::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 80px;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.carousel::before {
+  left: 0;
+  background: linear-gradient(to right, #000, transparent);
+}
+
+.carousel::after {
+  right: 0;
+  background: linear-gradient(to left, #000, transparent);
+}
+
+/* ---------- ARROWS (DESKTOP) ---------- */
+
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 30, 30, 0.85);
+  border: none;
+  color: #fff;
+  font-size: 2rem;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.carousel-btn.prev { left: 0; }
+.carousel-btn.next { right: 0; }
+
+/* ---------- MOBILE ---------- */
+
+@media (max-width: 768px) {
+  .carousel {
+    padding: 0 20px;
+  }
+
+  .carousel-track img {
+    width: 92vw;
+	height: 65vw;
+    max-height: 360px;
+  }
+
+  .carousel-btn {
+    display: none;
   }
 }
 
@@ -364,17 +514,37 @@
     </section>
 
     <!-- ================= ГАЛЕРЕЯ ================= -->
-    <section class="page" id="gallery">
-      <h2>Атмосфера</h2>
-      <div class="gallery">
-        <img src="media/photo1.jpg" alt="" />
-        <img src="media/photo2.jpg" alt="" />
-        <img src="media/photo3.jpg" alt="" />
-        <img src="media/photo4.jpg" alt="" />
-        <img src="media/photo5.jpg" alt="" />
-        <img src="media/photo6.jpg" alt="" />
-      </div>
-    </section>
+<section class="page" id="gallery">
+  <h2>Атмосфера</h2>
+
+  <div class="carousel">
+    <button class="carousel-btn prev">‹</button>
+
+    <div class="carousel-track">
+		<div class="carousel-item" style="--bg: url('media/photo1.jpg')" data-caption="LEVEL · Томск · Live">
+		  <img src="media/photo1.jpg" />
+		</div>
+		<div class="carousel-item" style="--bg: url('media/photo2.jpg')" data-caption="Фотосессия · Томск">
+		  <img src="media/photo2.jpg"/>
+		</div>
+		<div class="carousel-item" style="--bg: url('media/photo3.jpg')" data-caption="9 мая · Томск · Live">
+		  <img src="media/photo3.jpg" />
+		</div>
+		<div class="carousel-item" style="--bg: url('media/photo4.jpg')" data-caption="Репетиция · Томск">
+		  <img src="media/photo4.jpg"/>
+		</div>
+		<div class="carousel-item" style="--bg: url('media/photo5.jpg')" data-caption="9 мая · Томск · Live">
+		  <img src="media/photo5.jpg" />
+		</div>
+		<div class="carousel-item" style="--bg: url('media/photo6.jpg')" data-caption="Репетиция · Томск">
+		  <img src="media/photo6.jpg"/>
+		</div>
+    </div>
+
+    <button class="carousel-btn next">›</button>
+  </div>
+</section>
+
 
     <!-- ================= КОНТАКТЫ ================= -->
     <section class="page" id="contacts">
@@ -497,6 +667,98 @@ if (videosScroll && pageContainer && videosSection) {
   });
 }
 </script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const track = document.querySelector(".carousel-track");
+  const prevBtn = document.querySelector(".carousel-btn.prev");
+  const nextBtn = document.querySelector(".carousel-btn.next");
+
+  if (!track) return;
+
+  let items = Array.from(track.children);
+  const realCount = items.length;
+  const cloneCount = realCount;
+
+  /* ---------- CLONE FOR LOOP ---------- */
+  items.forEach(item => {
+    track.appendChild(item.cloneNode(true));
+    track.insertBefore(item.cloneNode(true), track.firstChild);
+  });
+
+  items = Array.from(track.children);
+
+  let activeIndex = cloneCount + Math.floor(realCount / 2);
+  let ticking = false;
+
+  function setActive(index) {
+    items.forEach((item, i) =>
+      item.classList.toggle("active", i === index)
+    );
+  }
+
+  function centerTo(index, behavior = "smooth") {
+    items[index].scrollIntoView({
+      behavior,
+      inline: "center",
+      block: "nearest"
+    });
+    setActive(index);
+  }
+
+  /* ---------- INIT ---------- */
+  requestAnimationFrame(() => centerTo(activeIndex, "auto"));
+
+  /* ---------- CONTROLS ---------- */
+  prevBtn?.addEventListener("click", () => {
+    activeIndex--;
+    centerTo(activeIndex);
+  });
+
+  nextBtn?.addEventListener("click", () => {
+    activeIndex++;
+    centerTo(activeIndex);
+  });
+
+  /* ---------- SCROLL / SWIPE ---------- */
+  track.addEventListener("scroll", () => {
+    if (ticking) return;
+    ticking = true;
+
+    requestAnimationFrame(() => {
+      const center = track.scrollLeft + track.clientWidth / 2;
+
+      let closest = activeIndex;
+      let min = Infinity;
+
+      items.forEach((item, i) => {
+        const itemCenter = item.offsetLeft + item.offsetWidth / 2;
+        const dist = Math.abs(center - itemCenter);
+        if (dist < min) {
+          min = dist;
+          closest = i;
+        }
+      });
+
+      activeIndex = closest;
+      setActive(activeIndex);
+
+      /* ---------- LOOP FIX ---------- */
+      if (activeIndex < cloneCount) {
+        activeIndex += realCount;
+        centerTo(activeIndex, "auto");
+      }
+
+      if (activeIndex >= cloneCount + realCount) {
+        activeIndex -= realCount;
+        centerTo(activeIndex, "auto");
+      }
+
+      ticking = false;
+    });
+  });
+});
+</script>
+
 
 
 
