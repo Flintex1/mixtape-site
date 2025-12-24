@@ -754,11 +754,29 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 </script>
+<script>
+if ("scrollRestoration" in history) {
+  history.scrollRestoration = "manual";
+}
 
+window.addEventListener("load", () => {
+  const container = document.querySelector(".page-container");
+  if (container) {
+    container.scrollTo({ top: 0, behavior: "auto" });
+  }
+
+  if (location.hash) {
+    history.replaceState(null, "", location.pathname);
+  }
+});
+</script>
+
+	
 
 
 
 </body>
 </html>
+
 
 
