@@ -166,11 +166,13 @@
       padding: 0 20px 40px;
     }
 
-    .video-item {
-      display: flex;
-      justify-content: center;
-      scroll-snap-align: start;
-    }
+.video-item {
+  height: calc(100vh - 120px); /* 120px ≈ заголовок + отступы */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* 👈 важно */
+  scroll-snap-align: start;
+}
 
     .video-item video {
       width: 280px;
@@ -191,6 +193,11 @@
   .video-item {
     scroll-snap-align: start;
   }
+}
+.videos-scroll::after {
+  content: "";
+  height: calc(100vh - 120px);
+  flex-shrink: 0;
 }
 
 .swipe-hint {
@@ -380,15 +387,28 @@
       </div>
     </section>
   </div>
-
 <script>
-const videos = document.querySelectorAll(".video-item video");
-const items  = document.querySelectorAll(".video-item");
+const videos = Array.from(document.querySelectorAll(".video-item video"));
+const items  = Array.from(document.querySelectorAll(".video-item"));
+
+const videosScroll = document.querySelector(".videos-scroll");
+const pageContainer = document.querySelector(".page-container");
+const videosSection = document.querySelector(".videos-page");
 
 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 let unlocked = !isMobile;
+let activeIndex = 0;
+let exitedVideos = false;
 
-/* ---------- UNLOCK AUTOPLAY ---------- */
+if (!isMobile) {
+  videos.forEach(v => {
+    v.muted = true;
+    v.play().catch(() => {});
+  });
+}
+
+
+/* ---------- UNLOCK AUTOPLAY (MOBILE) ---------- */
 if (isMobile) {
   const unlock = () => {
     unlocked = true;
@@ -405,32 +425,41 @@ if (isMobile) {
   window.addEventListener("scroll", unlock, { once: true });
 }
 
-/* ---------- PLAY ON VISIBILITY ---------- */
-const observer = new IntersectionObserver(
+/* ---------- SNAP OBSERVER (SOURCE OF TRUTH) ---------- */
+const snapObserver = new IntersectionObserver(
   entries => {
     entries.forEach(entry => {
-      const video = entry.target.querySelector("video");
-      if (!video || !unlocked) return;
+      if (!entry.isIntersecting) return;
 
-      if (entry.isIntersecting) {
-        video.play().catch(() => {});
-      } else {
-        if (!isMobile) {
-          video.pause(); // ❗ ТОЛЬКО НА ПК
-        }
-        // 📱 на мобилке НЕ pause
-      }
+      const index = items.indexOf(entry.target);
+      if (index === -1) return;
+
+      activeIndex = index;
+      syncVideos();
     });
   },
   { threshold: 0.6 }
 );
 
-items.forEach(item => observer.observe(item));
+items.forEach(item => snapObserver.observe(item));
+
+/* ---------- PLAY / PAUSE LOGIC ---------- */
+function syncVideos() {
+  if (!unlocked) return;
+
+  // 📱 МОБИЛКА — только активное
+  if (isMobile) {
+    videos.forEach((video, i) => {
+      if (i === activeIndex) {
+        video.play().catch(() => {});
+      }
+    });
+  }
+}
+
 
 /* ---------- SWIPE HINT ---------- */
 const swipeHint = document.querySelector(".swipe-hint");
-const videosScroll = document.querySelector(".videos-scroll");
-
 if (swipeHint && videosScroll) {
   videosScroll.addEventListener(
     "scroll",
@@ -442,24 +471,19 @@ if (swipeHint && videosScroll) {
   );
 }
 
-/* ---------- EXIT FROM VIDEOS SECTION (FIXED) ---------- */
-const pageContainer = document.querySelector(".page-container");
-const videosSection = document.querySelector(".videos-page");
-
-let exitedVideos = false;
-
+/* ---------- EXIT TO NEXT SECTION ---------- */
 if (videosScroll && pageContainer && videosSection) {
   videosScroll.addEventListener("scroll", () => {
+    if (activeIndex !== items.length - 1 || exitedVideos) return;
+
     const atBottom =
       videosScroll.scrollTop + videosScroll.clientHeight >=
-      videosScroll.scrollHeight - 8;
+      videosScroll.scrollHeight - 5;
 
-    if (atBottom && !exitedVideos) {
+    if (atBottom) {
       exitedVideos = true;
 
-      const pages = Array.from(
-        pageContainer.querySelectorAll(".page")
-      );
+      const pages = Array.from(pageContainer.querySelectorAll(".page"));
       const currentIndex = pages.indexOf(videosSection);
       const nextPage = pages[currentIndex + 1];
 
@@ -473,6 +497,7 @@ if (videosScroll && pageContainer && videosSection) {
   });
 }
 </script>
+
 
 
 </body>
