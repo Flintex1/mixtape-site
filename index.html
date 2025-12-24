@@ -1,782 +1,230 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
-    rel="stylesheet"
-  />
-  <title>Mixtape — Live Cover Band</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mixtape — Live Cover Band</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet">
 
-    html,
-    body {
-      margin: 0;
-      height: 100%;
-      overflow: hidden; /* скроллим только .page-container */
-    }
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden}
+body{font-family:Montserrat,sans-serif;background:#000;color:#fff}
 
-    body {
-      font-family: "Montserrat", sans-serif;
-      background: #000;
-      color: #fff;
-    }
+/* ===== SNAP ===== */
+.page-container{
+  height:100%;
+  overflow-y:scroll;
+  scroll-snap-type:y mandatory;
+  -webkit-overflow-scrolling:touch;
+}
+.page-container.snap-disabled{scroll-snap-type:none!important}
+.page{height:100vh;scroll-snap-align:start}
 
-    /* ---------- SNAP СКРОЛЛ ДЛЯ ВСЕГО ЛЕНДИНГА ---------- */
-
-    .page-container {
-      height: 100%;
-      overflow-y: scroll;
-      scroll-snap-type: y mandatory;
-      scroll-behavior: smooth;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    .page {
-      height: 100vh;
-      scroll-snap-align: start;
-    }
-
-    /* ---------------- HERO BLOCK ---------------- */
-
-    .hero {
-      width: 100%;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 0 20px;
-      overflow: hidden;
-      filter: drop-shadow(0 0 20px rgba(255, 30, 30, 0.25));
-    }
-
-    .fade-up {
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fadeUp 0.8s ease forwards;
-    }
-
-    @keyframes fadeUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .hero video {
-      max-width: 65%;
-      height: auto;
-      z-index: 2;
-      object-fit: contain;
-    }
-
-    .hero::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.35);
-      z-index: 1;
-    }
-
-    .hero::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at center, transparent 60%, rgba(0, 0, 0, 0.6));
-      z-index: 1;
-    }
-
-    .hero h1 {
-      margin: 20px 0 5px;
-      font-size: 3rem;
-      z-index: 3;
-    }
-
-    .hero h2 {
-      margin: 0;
-      font-size: 1.2rem;
-      font-weight: 300;
-      opacity: 0.8;
-      z-index: 3;
-    }
-
-    .cta {
-      margin-top: 25px;
-      display: flex;
-      gap: 20px;
-      z-index: 3;
-    }
-
-    .cta a {
-      text-decoration: none;
-      background: #ff1f1f;
-      color: #fff;
-      padding: 12px 22px;
-      border-radius: 6px;
-      font-size: 1rem;
-      box-shadow: 0 0 12px rgba(255, 0, 0, 0.4);
-      transition: 0.25s;
-    }
-
-    .cta a:hover {
-      background: #ff3c3c;
-      box-shadow: 0 0 20px rgba(255, 0, 0, 0.7);
-      transform: translateY(-2px);
-    }
-
-    /* ---------------- ОБЩЕЕ ДЛЯ СЕКЦИЙ ---------------- */
-
-    section {
-      padding: 80px 20px;
-      text-align: center;
-    }
-
-    section h2 {
-      font-size: 2rem;
-      margin-bottom: 30px;
-    }
-
-    /* ---------- ВЕРТИКАЛКИ: ОТДЕЛЬНЫЙ ВНУТРЕННИЙ СКРОЛЛ ---------- */
-
-    .videos-page {
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 40px 0 20px;
-    }
-
-    .videos-scroll {
-      flex: 1;
-      width: 100%;
-      overflow-y: auto;
-      scroll-snap-type: y mandatory;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      padding: 0 20px 40px;
-    }
-
-.video-item {
-  height: calc(100vh - 120px); /* 120px ≈ заголовок + отступы */
-  display: flex;
-  justify-content: center;
-  align-items: flex-start; /* 👈 важно */
-  scroll-snap-align: start;
+/* ===== HERO ===== */
+.hero{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:20px;
+}
+.hero video{max-width:65%;z-index:2}
+.hero::before,.hero::after{
+  content:"";position:absolute;inset:0;z-index:1
+}
+.hero::before{background:rgba(0,0,0,.35)}
+.hero::after{background:radial-gradient(circle,transparent 60%,rgba(0,0,0,.6))}
+.hero h1{font-size:3rem;z-index:3;margin:20px 0 5px}
+.hero h2{font-weight:300;opacity:.8;z-index:3}
+.cta{display:flex;gap:20px;margin-top:25px;z-index:3}
+.cta a{
+  background:#ff1f1f;color:#fff;text-decoration:none;
+  padding:12px 22px;border-radius:6px;
+  box-shadow:0 0 12px rgba(255,0,0,.4)
+}
+@media(max-width:768px){
+  .hero video{max-width:80%}
+  .cta{flex-direction:column}
 }
 
-    .video-item video {
-      width: 280px;
-      height: 500px;
-      object-fit: cover;
-      border-radius: 12px;
-      background: #111;
-    }
-	
-	@media (max-width: 1023px) {
+/* ===== VERTICAL VIDEOS ===== */
+.videos-page{padding:40px 0 20px;overflow:hidden;text-align:center}
+.videos-scroll{
+  height:calc(100vh - 140px);
+  overflow-y:auto;
+  scroll-snap-type:y mandatory;
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+  padding:0 20px 40px;
+}
+.video-item{
+  height:calc(100vh - 140px);
+  scroll-snap-align:start;
+  display:flex;
+  justify-content:center;
+}
+.video-item video{
+  width:280px;height:500px;
+  object-fit:cover;border-radius:12px
+}
+.videos-scroll::-webkit-scrollbar{display:none}
+.swipe-hint{
+  position:absolute;bottom:24px;left:50%;
+  transform:translateX(-50%);
+  opacity:.5;font-size:13px;pointer-events:none
+}
 
-  .videos-scroll {
-    scroll-snap-type: y mandatory;
-    overscroll-behavior: auto;
-    -webkit-overflow-scrolling: touch;
+/* desktop videos */
+@media(min-width:1024px){
+  .videos-scroll{
+    flex-direction:row;
+    justify-content:center;
+    align-items:center;
+    overflow:visible;
+    scroll-snap-type:none
   }
-
-  .video-item {
-    scroll-snap-align: start;
-  }
-}
-.videos-scroll::after {
-  content: "";
-  height: calc(100vh - 120px);
-  flex-shrink: 0;
+  .video-item{height:auto}
 }
 
-.swipe-hint {
-  position: absolute;
-  bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 14px;
-  opacity: 0.6;
-  letter-spacing: 0.05em;
-  animation: swipePulse 1.6s infinite;
-  pointer-events: none;
-  z-index: 5;
+/* ===== CAROUSEL ===== */
+.carousel{position:relative;padding:0 40px}
+.carousel-track{
+  display:flex;gap:24px;align-items:center;
+  overflow-x:auto;scroll-snap-type:x mandatory;
+}
+.carousel-track::-webkit-scrollbar{display:none}
+.carousel-item{
+  flex:0 0 auto;
+  width:min(92vw,420px);
+  aspect-ratio:3/4;
+  position:relative;
+  border-radius:16px;
+  overflow:hidden;
+  opacity:.5;
+  scroll-snap-align:center;
+  transition:.4s
+}
+.carousel-item.active{opacity:1;transform:scale(1.12)}
+.carousel-item::before{
+  content:"";position:absolute;inset:0;
+  background-image:var(--bg);
+  background-size:cover;
+  filter:blur(20px) brightness(.6);
+  transform:scale(1.2)
+}
+.carousel-item::after{
+  content:attr(data-caption);
+  position:absolute;bottom:14px;left:14px;right:14px;
+  font-size:12px;opacity:.7
+}
+.carousel-item img{
+  position:relative;z-index:2;
+  width:100%;height:100%;object-fit:contain
 }
 
-@keyframes swipePulse {
-  0%   { transform: translate(-50%, 0); opacity: .2; }
-  50%  { transform: translate(-50%, -8px); opacity: .7; }
-  100% { transform: translate(-50%, 0); opacity: .2; }
+/* mobile carousel */
+@media(max-width:480px){
+  .carousel-item{width:82vw;aspect-ratio:3/5}
+  .carousel-item img{object-fit:cover;object-position:center top}
 }
 
-
-    /* ---------------- REPERTOIRE ---------------- */
-
-    .songs {
-      max-width: 600px;
-      margin: 0 auto;
-      font-size: 1.2rem;
-      line-height: 1.8;
-      opacity: 0.9;
-    }
-
-    /* ---------------- GALLERY ---------------- */
-
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 20px;
-      padding: 10px;
-    }
-
-    .gallery img {
-      width: 100%;
-      height: 260px;
-      object-fit: cover;
-      border-radius: 12px;
-    }
-
-    /* ---------------- CONTACTS ---------------- */
-
-    .contacts a {
-      text-decoration: none;
-      background: #ff1f1f;
-      color: #fff;
-      padding: 12px 22px;
-	  margin: 10px;
-      border-radius: 6px;
-      font-size: 1rem;
-      box-shadow: 0 0 12px rgba(255, 0, 0, 0.4);
-      transition: 0.25s;
-    }
-
-    .contacts a:hover {
-      background: #ff3c3c;
-      box-shadow: 0 0 20px rgba(255, 0, 0, 0.7);
-      transform: translateY(-2px);
-    }
-
-    /* ---------------- RESPONSIVE ---------------- */
-
-    @media (max-width: 768px) {
-	  .carousel-item {
-    width: 78vw;
-    height: auto;
-    max-height: 70vh;
-  }
-
-  .carousel-item img {
-    max-height: 70vh;
-  }
-      .hero video {
-        max-width: 80%;
-      }
-      .hero h1 {
-        font-size: 2.4rem;
-      }
-      .cta {
-        flex-direction: column;
-      }
-      .cta a {
-        width: 100%;
-        text-align: center;
-      }
-      .video-item video {
-        width: 90%;
-        height: 480px;
-      }
-	  .contacts {
-		  display: flex;
-		  flex-direction: column;
-		  gap: 14px;
-		  align-items: center;
-		}
-
-		.contacts a {
-		  width: 100%;
-		  max-width: 260px;
-		  text-align: center;
-		}
-
-    }
-	/* ================= DESKTOP: 3 видео в ряд ================= */
-
-@media (min-width: 1024px) {
-
-  .videos-page {
-    justify-content: center;
-  }
-
-  .videos-scroll {
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-
-    overflow: visible;          /* убираем внутренний скролл */
-    scroll-snap-type: none;     /* snap только для мобильных */
-    padding: 0 40px;
-  }
-
-  .video-item {
-    scroll-snap-align: none;
-  }
-
-  .video-item video {
-    width: 280px;
-    height: 500px;
-  }
+/* ===== CONTACTS ===== */
+.contacts{display:flex;flex-direction:column;gap:14px;align-items:center}
+.contacts a{
+  background:#ff1f1f;color:#fff;text-decoration:none;
+  padding:12px 22px;border-radius:6px;
+  max-width:260px;width:100%;text-align:center
 }
-/* ---------- CAROUSEL ---------- */
-
-.carousel {
-  position: relative;
-  max-width: 100%;
-  margin: 0 auto;
-  padding: 0 40px;
-}
-
-.carousel-track {
-  display: flex;
-  gap: 24px;
-  align-items: center;
-  padding: 20px 60px;
-  
-  overflow-x: auto;                
-  scroll-snap-type: x mandatory; 
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
-   scrollbar-width: none;          /* Firefox */
-  -ms-overflow-style: none;       /* IE / Edge */
-}
-.carousel-track::-webkit-scrollbar {
-  display: none;                  /* Chrome / Safari */
-}
-
-.carousel-item {
-  width: min(92vw, 420px);
-  aspect-ratio: 3 / 4; /* вертикальный герой */
-  flex: 0 0 auto;
-  position: relative;
-  border-radius: 16px;
-  overflow: hidden;
-  background: #000;
-  scroll-snap-align: center;
-	transition: transform .4s ease, opacity .4s ease;
-  opacity: 0.55;
-}
-
-.carousel-item.active {
-  transform: scale(1.15);
-  opacity: 1;
-  z-index: 5;
-}
-
-/* BLUR BACKGROUND */
-.carousel-item::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image: var(--bg);
-  background-size: cover;
-  background-position: center;
-  filter: blur(20px) brightness(0.6);
-  transform: scale(1.2);
-  z-index: 1;
-}
-
-.carousel-item::after {
-  content: attr(data-caption);
-  position: absolute;
-  bottom: 24px;
-  left: 16px;
-  right: 16px;
-  font-size: 12px;
-  opacity: 0.6;
-  z-index: 3;
-  white-space: normal; 
-  word-break: break-word;
-}
-
-/* MAIN IMAGE */
-.carousel-item img {
-  position: relative;
-  z-index: 2;
-  height: 100%;
-  width: auto;
-  max-width: 100%;
-  object-fit: contain;
-  margin: 0 auto;
-  display: block;
-}
-
-.carousel-item:hover:not(.active) {
-  transform: scale(1.06);
-  opacity: 1;
-}
-
-.carousel-track::-webkit-scrollbar {
-  display: none;
-}
-
-.carousel::before,
-.carousel::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  width: 80px;
-  height: 100%;
-  z-index: 1;
-  pointer-events: none;
-}
-
-.carousel::before {
-  left: 0;
-  background: linear-gradient(to right, #000, transparent);
-}
-
-.carousel::after {
-  right: 0;
-  background: linear-gradient(to left, #000, transparent);
-}
-
-/* ---------- ARROWS (DESKTOP) ---------- */
-
-.carousel-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(255, 30, 30, 0.85);
-  border: none;
-  color: #fff;
-  font-size: 2rem;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  cursor: pointer;
-  z-index: 2;
-}
-
-.carousel-btn.prev { left: 0; }
-.carousel-btn.next { right: 0; }
-
-/* ---------- MOBILE ---------- */
-@media (max-width: 480px) {
-.carousel-item {
-    width: 92vw;
-    aspect-ratio: 3 / 5; /* ещё вертикальнее */
-  }
-
-  .carousel-item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;   /* 🔑 ВАЖНО */
-	object-position: center top; /* 🔑 ВАЖНО */
-  }
-    .carousel-item::before {
-    filter: blur(24px) brightness(0.4);
-  }
-    .carousel-item::after {
-    bottom: 18px;
-    font-size: 11px;
-    text-align: center;
-  }
-}
-
-@media (max-width: 768px) {
-  .carousel {
-    padding: 0 20px;
-  }
-  .carousel-item {
-    width: 82vw;
-    height: 54vh;
-  }
-
-
-  .carousel-btn {
-    display: none;
-  }
-}
-
-  </style>
+</style>
 </head>
 
 <body>
-  <div class="page-container">
-    <!-- ================= HERO ================= -->
-    <div class="page hero">
-      <video autoplay loop muted playsinline>
-        <source src="media/mixtape_logo.webm" type="video/webm" />
-      </video>
 
-      <h1 class="fade-up">MIXTAPE</h1>
-      <h2 class="fade-up" style="animation-delay: 0.2s">Лайв каверы популярных хитов</h2>
+<div class="page-container snap-disabled">
 
-      <div class="cta">
-        <a href="#videos">▶ Смотреть лайв</a>
-        <a href="#contacts">📩 Забронировать</a>
-      </div>
-    </div>
-
-    <!-- ================= ВЕРТИКАЛКИ ================= -->
-    <section class="page videos-page" id="videos">
-      <h2>Live моменты</h2>
-<div class="swipe-hint">↑ свайпни ↑</div>
-
-      <div class="videos-scroll">
-        <div class="video-item">
-          <video muted playsinline preload="none" loop src="media/vert1.mp4"></video>
-        </div>
-
-        <div class="video-item">
-          <video muted playsinline preload="none" loop src="media/vert2.mp4"></video>
-        </div>
-
-        <div class="video-item">
-          <video muted playsinline preload="none" loop src="media/vert3.mp4"></video>
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= СЕТ-ЛИСТ ================= -->
-    <section class="page" id="repertoire">
-      <h2>Сет-лист</h2>
-      <div class="songs">
-        Blue October<br />
-        Звери<br />
-        Савичева<br />
-        + ещё более 20 исполнителей
-      </div>
-    </section>
-
-    <!-- ================= ГАЛЕРЕЯ ================= -->
-<section class="page" id="gallery">
-  <h2>Атмосфера</h2>
-
-  <div class="carousel">
-    <button class="carousel-btn prev">‹</button>
-
-    <div class="carousel-track">
-		<div class="carousel-item" style="--bg: url('media/photo1.jpg')" data-caption="LEVEL · Томск · Live">
-		  <img src="media/photo1.jpg" />
-		</div>
-		<div class="carousel-item" style="--bg: url('media/photo2.jpg')" data-caption="Фотосессия · Томск">
-		  <img src="media/photo2.jpg"/>
-		</div>
-		<div class="carousel-item" style="--bg: url('media/photo3.jpg')" data-caption="9 мая · Томск · Live">
-		  <img src="media/photo3.jpg" />
-		</div>
-		<div class="carousel-item" style="--bg: url('media/photo4.jpg')" data-caption="Репетиция · Томск">
-		  <img src="media/photo4.jpg"/>
-		</div>
-		<div class="carousel-item" style="--bg: url('media/photo5.jpg')" data-caption="9 мая · Томск · Live">
-		  <img src="media/photo5.jpg" />
-		</div>
-		<div class="carousel-item" style="--bg: url('media/photo6.jpg')" data-caption="Репетиция · Томск">
-		  <img src="media/photo6.jpg"/>
-		</div>
-    </div>
-
-    <button class="carousel-btn next">›</button>
+<!-- HERO -->
+<section class="page hero">
+  <video autoplay muted loop playsinline>
+    <source src="media/mixtape_logo.webm" type="video/webm">
+  </video>
+  <h1>MIXTAPE</h1>
+  <h2>Лайв каверы популярных хитов</h2>
+  <div class="cta">
+    <a href="#videos">▶ Смотреть лайв</a>
+    <a href="#contacts">📩 Забронировать</a>
   </div>
 </section>
 
-
-    <!-- ================= КОНТАКТЫ ================= -->
-    <section class="page" id="contacts">
-      <h2>Контакты</h2>
-      <p>Играем в Томске, Новосибирске и Кемерово</p>
-      <div class="contacts">
-        <a href="https://t.me/Drewfli" target="_blank">Telegram</a>
-        <a href="https://vk.com/mixtape.coverband" target="_blank">VK</a>
-        <a href="tel:+79131038078">Позвонить</a>
-      </div>
-    </section>
+<!-- VIDEOS -->
+<section class="page videos-page" id="videos">
+  <h2>Live моменты</h2>
+  <div class="swipe-hint">↑ свайпни ↑</div>
+  <div class="videos-scroll">
+    <div class="video-item"><video muted loop playsinline src="media/vert1.mp4"></video></div>
+    <div class="video-item"><video muted loop playsinline src="media/vert2.mp4"></video></div>
+    <div class="video-item"><video muted loop playsinline src="media/vert3.mp4"></video></div>
   </div>
+</section>
+
+<!-- GALLERY -->
+<section class="page">
+<h2>Атмосфера</h2>
+<div class="carousel">
+<div class="carousel-track">
+  <div class="carousel-item active" style="--bg:url('media/photo1.jpg')" data-caption="Live · Томск">
+    <img src="media/photo1.jpg">
+  </div>
+  <div class="carousel-item" style="--bg:url('media/photo2.jpg')" data-caption="Репетиция">
+    <img src="media/photo2.jpg">
+  </div>
+  <div class="carousel-item" style="--bg:url('media/photo3.jpg')" data-caption="Live">
+    <img src="media/photo3.jpg">
+  </div>
+</div>
+</div>
+</section>
+
+<!-- CONTACTS -->
+<section class="page" id="contacts">
+<h2>Контакты</h2>
+<div class="contacts">
+  <a href="https://t.me/Drewfli">Telegram</a>
+  <a href="https://vk.com/mixtape.coverband">VK</a>
+  <a href="tel:+79131038078">Позвонить</a>
+</div>
+</section>
+
+</div>
+
+<!-- ===== AUTOPLAY FIX ===== -->
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-  const videos = document.querySelectorAll(".video-item video");
-  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
-  let unlocked = !isMobile;
-
-  /* ---------- PREP ---------- */
-  videos.forEach(v => {
-    v.muted = true;
-    v.playsInline = true;
-    v.loop = true;
-  });
-
-  /* ---------- UNLOCK AUTOPLAY (MOBILE) ---------- */
-  if (isMobile) {
-    const unlock = () => {
-      unlocked = true;
-
-      videos.forEach(v => {
-        v.play().catch(() => {});
-      });
-
-      window.removeEventListener("touchstart", unlock);
-      window.removeEventListener("click", unlock);
-    };
-
-    window.addEventListener("touchstart", unlock, { once: true });
-    window.addEventListener("click", unlock, { once: true });
-  }
-
-  /* ---------- INTERSECTION ---------- */
-  const observer = new IntersectionObserver(
-    entries => {
-      entries.forEach(entry => {
-        const video = entry.target;
-
-        if (!unlocked) return;
-
-        if (isMobile) {
-          // 📱 MOBILE — НИКОГДА НЕ PAUSE
-          if (video.paused) {
-            video.play().catch(() => {});
-          }
-        } else {
-          // 🖥 DESKTOP — normal behavior
-          if (entry.isIntersecting) {
-            video.play().catch(() => {});
-          } else {
-            video.pause();
-          }
-        }
-      });
-    },
-    { threshold: 0.6 }
-  );
-
-  videos.forEach(v => observer.observe(v));
+document.querySelectorAll("video").forEach(v=>{
+  v.muted=true;v.playsInline=true;
 });
+window.addEventListener("touchstart",()=>{
+  document.querySelectorAll("video").forEach(v=>v.play().catch(()=>{}));
+},{once:true});
 </script>
 
+<!-- ===== HERO FIRST FIX ===== -->
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-  const track = document.querySelector(".carousel-track");
-  const prevBtn = document.querySelector(".carousel-btn.prev");
-  const nextBtn = document.querySelector(".carousel-btn.next");
-
-  if (!track) return;
-
-  let items = Array.from(track.children);
-  const realCount = items.length;
-  const cloneCount = realCount;
-
-  /* ---------- CLONE FOR LOOP ---------- */
-  items.forEach(item => {
-    track.appendChild(item.cloneNode(true));
-    track.insertBefore(item.cloneNode(true), track.firstChild);
-  });
-
-  items = Array.from(track.children);
-
-  let activeIndex = cloneCount + Math.floor(realCount / 2);
-  let ticking = false;
-
-  function setActive(index) {
-    items.forEach((item, i) =>
-      item.classList.toggle("active", i === index)
-    );
-  }
-
-  function centerTo(index, behavior = "smooth") {
-    items[index].scrollIntoView({
-      behavior,
-      inline: "center",
-      block: "nearest"
-    });
-    setActive(index);
-  }
-
-  /* ---------- INIT ---------- */
-  requestAnimationFrame(() => centerTo(activeIndex, "auto"));
-
-  /* ---------- CONTROLS ---------- */
-  prevBtn?.addEventListener("click", () => {
-    activeIndex--;
-    centerTo(activeIndex);
-  });
-
-  nextBtn?.addEventListener("click", () => {
-    activeIndex++;
-    centerTo(activeIndex);
-  });
-
-  /* ---------- SCROLL / SWIPE ---------- */
-  track.addEventListener("scroll", () => {
-    if (ticking) return;
-    ticking = true;
-
-    requestAnimationFrame(() => {
-      const center = track.scrollLeft + track.clientWidth / 2;
-
-      let closest = activeIndex;
-      let min = Infinity;
-
-      items.forEach((item, i) => {
-        const itemCenter = item.offsetLeft + item.offsetWidth / 2;
-        const dist = Math.abs(center - itemCenter);
-        if (dist < min) {
-          min = dist;
-          closest = i;
-        }
-      });
-
-      activeIndex = closest;
-      setActive(activeIndex);
-
-      /* ---------- LOOP FIX ---------- */
-      if (activeIndex < cloneCount) {
-        activeIndex += realCount;
-        centerTo(activeIndex, "auto");
-      }
-
-      if (activeIndex >= cloneCount + realCount) {
-        activeIndex -= realCount;
-        centerTo(activeIndex, "auto");
-      }
-
-      ticking = false;
-    });
-  });
+if("scrollRestoration"in history)history.scrollRestoration="manual";
+window.addEventListener("load",()=>{
+  const c=document.querySelector(".page-container");
+  c.scrollTo(0,0);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    c.scrollTo(0,0);
+    c.classList.remove("snap-disabled");
+  }));
 });
 </script>
-<script>
-if ("scrollRestoration" in history) {
-  history.scrollRestoration = "manual";
-}
-
-window.addEventListener("load", () => {
-  const container = document.querySelector(".page-container");
-  if (container) {
-    container.scrollTo({ top: 0, behavior: "auto" });
-  }
-
-  if (location.hash) {
-    history.replaceState(null, "", location.pathname);
-  }
-});
-</script>
-
-	
-
-
 
 </body>
 </html>
-
-
-
