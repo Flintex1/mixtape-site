@@ -184,7 +184,7 @@
 
   .videos-scroll {
     scroll-snap-type: y mandatory;
-    overscroll-behavior: contain;
+    overscroll-behavior: auto;
     -webkit-overflow-scrolling: touch;
   }
 
@@ -430,6 +430,24 @@ if (swipeHint && videosScroll) {
     swipeHint.style.opacity = "0";
     swipeHint.style.transition = "opacity .4s";
   }, { once: true });
+}
+
+const videosScroll = document.querySelector(".videos-scroll");
+const pageContainer = document.querySelector(".page-container");
+
+if (videosScroll && pageContainer) {
+  videosScroll.addEventListener("scroll", () => {
+    const atBottom =
+      videosScroll.scrollTop + videosScroll.clientHeight >=
+      videosScroll.scrollHeight - 10;
+
+    if (atBottom) {
+      pageContainer.scrollTo({
+        top: pageContainer.scrollTop + window.innerHeight,
+        behavior: "smooth",
+      });
+    }
+  });
 }
 
 </script>
