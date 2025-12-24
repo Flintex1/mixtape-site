@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <title>Mixtape — Live Cover Band</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Montserrat', sans-serif;
+      background: #000;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    /* ---------------- HERO BLOCK ---------------- */
+
+    .hero {
+      height: 100vh;
+      width: 100%;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0 20px;
+	  filter: drop-shadow(0 0 20px rgba(255, 30, 30, 0.25));
+    }
+	.fade-up {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp .8s ease forwards;
+}
+
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+
+    .hero video {
+      max-width: 65%;
+      height: auto;
+      z-index: 2;
+      object-fit: contain;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.35); /* легкое затемнение */
+      z-index: 1;
+    }
+	.hero::after {
+  content:"";
+  position:absolute;
+  inset:0;
+  background: radial-gradient(circle at center, transparent 60%, rgba(0,0,0,0.6));
+  z-index: 1;
+}
+
+    .hero h1 {
+      margin: 20px 0 5px;
+      font-size: 3rem;
+      z-index: 3;
+    }
+
+    .hero h2 {
+      margin: 0;
+      font-size: 1.2rem;
+      font-weight: 300;
+      opacity: 0.8;
+      z-index: 3;
+    }
+
+    .cta {
+      margin-top: 25px;
+      display: flex;
+      gap: 20px;
+      z-index: 3;
+    }
+
+    .cta a {
+      text-decoration: none;
+      background: #ff1f1f;
+      color: #fff;
+      padding: 12px 22px;
+      border-radius: 6px;
+      font-size: 1rem;
+      transition: 0.2s;
+    }
+
+    .cta a:hover {
+      background: #ff3c3c;
+    }
+	
+	.cta a {
+  background: #ff1f1f;
+  box-shadow: 0 0 12px rgba(255,0,0,0.4);
+  transition: .25s;
+}
+
+.cta a:hover {
+  box-shadow: 0 0 20px rgba(255,0,0,0.7);
+  transform: translateY(-2px);
+}
+
+
+    /* ---------------- SECTION WRAPPER ---------------- */
+
+    section {
+      padding: 80px 20px;
+      text-align: center;
+    }
+
+    section h2 {
+      font-size: 2rem;
+      margin-bottom: 30px;
+    }
+
+    /* ---------------- VERTICAL VIDEOS BLOCK ---------------- */
+
+    .vertical-videos {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .vertical-videos video {
+      width: 280px;
+      height: 500px;
+      object-fit: cover;
+      border-radius: 12px;
+      background: #111;
+    }
+
+    /* ---------------- REPERTOIRE ---------------- */
+
+    .songs {
+      max-width: 600px;
+      margin: 0 auto;
+      font-size: 1.2rem;
+      line-height: 1.8;
+      opacity: 0.9;
+    }
+
+    /* ---------------- GALLERY ---------------- */
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+      padding: 10px;
+    }
+
+    .gallery img {
+      width: 100%;
+      height: 260px;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+
+    /* ---------------- CONTACTS ---------------- */
+
+    .contacts a {
+      display: inline-block;
+      margin: 10px;
+      padding: 12px 20px;
+      background: #ff1f1f;
+      color: #fff;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: 0.2s;
+    }
+
+    .contacts a:hover {
+      background: #ff3c3c;
+    }
+
+    /* ---------------- RESPONSIVE ---------------- */
+
+    @media (max-width: 768px) {
+      .hero video {
+        max-width: 80%;
+      }
+      .hero h1 {
+        font-size: 2.4rem;
+      }
+      .cta {
+        flex-direction: column;
+      }
+      .cta a {
+        width: 100%;
+        text-align: center;
+      }
+      .vertical-videos video {
+        width: 90%;
+        height: 480px;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <!-- ================= HERO BLOCK ================= -->
+
+  <div class="hero">
+    <video autoplay loop muted playsinline>
+      <source src="media/mixtape_logo.webm" type="video/webm">
+    </video>
+
+    <h1 class="fade-up">Mixtape</h1>
+    <h2 class="fade-up" style="animation-delay:.2s"> Rock Versions of Pop Hits</h2>
+
+    <div class="cta">
+      <a href="#videos">▶ Смотреть лайв</a>
+      <a href="#contacts">📩 Забронировать</a>
+    </div>
+  </div>
+
+  <!-- ================= SECTION 2: VERTICAL VIDEOS ================= -->
+
+  <section id="videos">
+    <h2>Live моменты</h2>
+    <div class="vertical-videos">
+      <video autoplay loop muted playsinline src="media/vert1.mp4"></video>
+      <video autoplay loop muted playsinline src="media/vert2.mp4"></video>
+      <video autoplay loop muted playsinline src="media/vert3.mp4"></video>
+    </div>
+  </section>
+
+  <!-- ================= SECTION 3: REPERTOIRE ================= -->
+
+  <section id="repertoire">
+    <h2>Сет-лист</h2>
+    <div class="songs">
+      Blue October<br>
+      Звери<br>
+	  Савичева<br>
+      + ещё более 20 исполнителей
+    </div>
+  </section>
+
+  <!-- ================= SECTION 4: GALLERY ================= -->
+
+  <section id="gallery">
+    <h2>Атмосфера</h2>
+    <div class="gallery">
+      <img src="media/photo1.jpg">
+      <img src="media/photo2.jpg">
+      <img src="media/photo3.jpg">
+      <img src="media/photo4.jpg">
+      <img src="media/photo5.jpg">
+      <img src="media/photo6.jpg">
+    </div>
+  </section>
+
+  <!-- ================= SECTION 5: CONTACTS ================= -->
+
+  <section id="contacts">
+    <h2>Контакты</h2>
+    <p>Играем в Томске, Новосибирске и Кемерово</p>
+    <div class="contacts">
+      <a href="https://t.me/yourusername" target="_blank">Telegram</a>
+      <a href="https://vk.com/yourpage" target="_blank">VK</a>
+      <a href="tel:+79990000000">Позвонить</a>
+    </div>
+  </section>
+
+</body>
+</html>
