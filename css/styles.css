@@ -589,7 +589,7 @@ section h2::after {
 /* --- SEO blocks: Formats + FAQ --- */
 .section-inner { max-width: 980px; margin: 0 auto; padding: 0 18px; }
 .section-title { margin: 0 0 10px; }
-.section-subtitle { margin: 0 0 18px 10px; opacity: .85; }
+.section-subtitle { margin: 10px 0 18px; opacity: .85; }
 
 .cards-grid{
   display: grid;
