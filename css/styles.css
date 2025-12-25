@@ -626,7 +626,7 @@ section h2::after {
   display: flex;
   gap: 14px;
   margin-top: 18px;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
 }
 
