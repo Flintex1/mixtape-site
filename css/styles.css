@@ -129,9 +129,10 @@ body::before {
   display: flex;
   gap: 20px;
   z-index: 3;
+  flex-wrap: wrap;
 }
 
-.cta a {
+.cta a, .btn {
   text-decoration: none;
   background: linear-gradient(180deg, var(--accent-2), var(--accent));
   color: #fff;
@@ -143,9 +144,21 @@ body::before {
   border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
-.cta a:hover {
+.cta a:hover, .btn:hover {
   background: linear-gradient(180deg, #ff6b6b, var(--accent));
   box-shadow: 0 12px 34px rgba(255, 31, 31, 0.28);
+  transform: translateY(-2px);
+}
+
+.btn.ghost {
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: none;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.btn.ghost:hover {
+  background: rgba(255, 255, 255, 0.10);
+  box-shadow: none;
   transform: translateY(-2px);
 }
 
